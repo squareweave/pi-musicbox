@@ -1,0 +1,25 @@
+all:
+    hosts:
+        music:
+            # Hostname for the box, it will also be made available over mdns (e.g. at music.local)
+            hostname: music
+            # The hostname you want the nginx webserver to use
+            http_domain: music.local
+            # Your spotify username
+            spotify_username: ...
+            # Your spotify password
+            spotify_password: ...
+            # You can get these two by authenticating here: https://www.mopidy.com/authenticate/#spotify
+            # you want to put in the [spotify] ones, not [spotify_web]
+            spotify_client_id: ...
+            spotify_client_secret: ...
+
+            # SSH port to access your Pi
+            ansible_port: 2222
+            # SSH host to access your Pi
+            ansible_host: localhost
+            # The following are the default pi user and pwd, if you've changed those you'll
+            # need to change them here also
+            ansible_user: pi
+            ansible_ssh_pass: raspberry
+            ansible_become: true

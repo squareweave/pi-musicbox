@@ -1,0 +1,17 @@
+---
+- name: Set hostname
+  hostname:
+      name: "{{ hostname }}"
+- name: Update /etc/hosts
+  lineinfile:
+    dest=/etc/hosts
+    regexp="^127\.0\.1\.1"
+    line="127.0.1.1{{'\t'}} {{ hostname }}"
+    state=present
+- name: Install Avahi
+  apt: name=avahi-daemon state=installed
+- name: Start avahi daemon
+  service:
+      name: avahi-daemon
+      enabled: true
+      state: started

@@ -1,0 +1,31 @@
+---
+- name: Add mopidy APT repo signing key
+  apt_key:
+      url: https://apt.mopidy.com/mopidy.gpg
+      state: present
+- name: Add mopidy APT repo
+  apt_repository:
+      repo: deb http://apt.mopidy.com/ stretch main contrib non-free
+      state: present
+- name: Install packages
+  apt: name={{ item }} state=installed
+  with_items:
+      - mopidy
+      - mopidy-spotify
+      - mopidy-local-sqlite
+      - python-pip
+- name: Install pip packages
+  pip: name={{ item }} state=present
+  with_items:
+      - Mopidy-Iris
+      # - Mopidy-Spotify
+- name: Update mopidy config
+  template:
+      src: mopidy.conf
+      dest: /etc/mopidy/mopidy.conf
+      mode: 0640
+- name: Start mopidy
+  service:
+      name: mopidy
+      state: restarted
+      enabled: true
