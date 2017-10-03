@@ -1,6 +1,7 @@
 ---
 - name: Install nginx
-  apt: name=nginx state=installed
+  apt: name=nginx update_cache=yes state=installed
+  notify: restart nginx
   # APT attempts to start the service for some reason, which crashes under Qemu because it tries to use IPv6 which we
   # haven't got set up
   ignore_errors: True
@@ -8,8 +9,6 @@
   template:
       src: nginx.conf
       dest: /etc/nginx/sites-enabled/default
+  notify: restart nginx
 - name: Start nginx on boot
-  service:
-      name: nginx
-      state: restarted
-      enabled: true
+  service: name=nginx enabled=true

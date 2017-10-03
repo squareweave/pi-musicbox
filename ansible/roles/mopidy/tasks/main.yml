@@ -8,24 +8,22 @@
       repo: deb http://apt.mopidy.com/ stretch main contrib non-free
       state: present
 - name: Install packages
-  apt: name={{ item }} state=installed
+  apt: name={{ item }} update_cache=yes state=latest
   with_items:
       - mopidy
       - mopidy-spotify
       - mopidy-local-sqlite
       - python-pip
+  notify: restart mopidy
 - name: Install pip packages
-  pip: name={{ item }} state=present
+  pip: name={{ item }} state=latest
   with_items:
       - Mopidy-Iris
-      # - Mopidy-Spotify
 - name: Update mopidy config
   template:
       src: mopidy.conf
       dest: /etc/mopidy/mopidy.conf
       mode: 0640
-- name: Start mopidy
-  service:
-      name: mopidy
-      state: restarted
-      enabled: true
+  notify: restart mopidy
+- name: Start mopidy on boot
+  service: name=mopidy enabled=true
